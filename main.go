@@ -18,15 +18,7 @@ var (
 	bot      *telegram.Bot
 )
 
-func readValue(nodeID string) float32 {
-	ctx := context.Background()
-
-	c := opcua.NewClient(endpoint, opcua.SecurityMode(ua.MessageSecurityModeNone))
-	if err := c.Connect(ctx); err != nil {
-		log.Fatal(err)
-	}
-	defer c.Close()
-
+func readValue(nodeID string, c *opcua.Client) float32 {
 	id, err := ua.ParseNodeID(nodeID)
 	if err != nil {
 		log.Fatalf("invalid node id: %v", err)
@@ -47,7 +39,6 @@ func readValue(nodeID string) float32 {
 	if resp.Results[0].Status != ua.StatusOK {
 		log.Fatalf("Status not OK: %v", resp.Results[0].Status)
 	}
-	// log.Printf("%#v", resp.Results[0].Value.Value())
 	return resp.Results[0].Value.Value().(float32)
 }
 
@@ -57,13 +48,21 @@ func readAndCheckValues(nodes []string, min float32, max float32, freq string) {
 		log.Fatal("Invalid freq")
 		return
 	}
+	c := opcua.NewClient(endpoint, opcua.SecurityMode(ua.MessageSecurityModeNone))
+	ctx := context.Background()
+
+	if err := c.Connect(ctx); err != nil {
+		log.Fatal(err)
+	}
+	defer c.Close()
+
 	for {
 		time.Sleep(d)
 		for _, node := range nodes {
-			curr := readValue(node)
+			curr := readValue(node, c)
 			if curr > max || curr < min {
 				log.Printf("Out of value: %s ", node)
-				bot.Notify(fmt.Sprintf("Out of value: %s ", node))
+				bot.Notify(fmt.Sprintf("Node %s out of value: %f ", node, curr))
 			}
 		}
 	}

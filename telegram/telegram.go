@@ -6,14 +6,14 @@ import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 )
 
-// Bot ...
+// Bot structure
 type Bot struct {
 	APIKey string
 	bot    *tgbotapi.BotAPI
 	chanID int64
 }
 
-// NewBot ...
+// NewBot init
 func NewBot(key string, id int64) *Bot {
 	return &Bot{
 		APIKey: key,
@@ -21,7 +21,7 @@ func NewBot(key string, id int64) *Bot {
 	}
 }
 
-// Start ...
+// Start a bot
 func (b *Bot) Start() {
 	bot, err := tgbotapi.NewBotAPI(b.APIKey)
 	if err != nil {
@@ -33,7 +33,7 @@ func (b *Bot) Start() {
 	log.Printf("Authorized on account %s", bot.Self.UserName)
 }
 
-// Notify ...
+// Notify to channel
 func (b *Bot) Notify(text string) {
 	msg := tgbotapi.NewMessage(b.chanID, text)
 
