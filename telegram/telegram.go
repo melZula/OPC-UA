@@ -1,6 +1,7 @@
 package telegram
 
 import (
+	"fmt"
 	"log"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
@@ -25,7 +26,7 @@ func NewBot(key string, id int64) *Bot {
 func (b *Bot) Start() {
 	bot, err := tgbotapi.NewBotAPI(b.APIKey)
 	if err != nil {
-		log.Panic(err)
+		log.Fatal(fmt.Sprintf("Telegram bot: %s", err))
 	}
 
 	b.bot = bot
