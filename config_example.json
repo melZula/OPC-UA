@@ -1,0 +1,20 @@
+{
+    "url": "opc.tcp://localhost:53530/OPCUA/SimulationServer",
+    "nodes": [
+        "ns=3;i=1007",
+        "ns=3;i=1008",
+        "ns=3;i=1009",
+        "ns=3;i=1010",
+        "ns=3;i=1011",
+        "ns=3;i=1012",
+        "ns=3;i=1013",
+        "ns=3;i=1014",
+        "ns=3;i=1015",
+        "ns=3;i=1016"
+    ],
+    "min_value": -4,
+    "max_value": 4,
+    "freq": "2s",
+    "telegram_api_key": "",
+    "channel_id": 11234567890
+}
